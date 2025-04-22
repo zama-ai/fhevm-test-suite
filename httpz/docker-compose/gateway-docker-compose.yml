@@ -38,7 +38,7 @@ services:
     env_file:
       - ../env/staging/.env.gateway.local
     command:
-      - npx hardhat task:addNetworksToHttpz
+      - npx hardhat task:addNetworksToGatewayConfig
     depends_on:
       gateway-node:
         condition: service_started

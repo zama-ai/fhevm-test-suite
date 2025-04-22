@@ -75,7 +75,7 @@ services:
       - gw_listener
       - --database-url=${DATABASE_URL}
       - --gw-url=${GATEWAY_WS_URL}
-      - --zkpok-manager-address=${ZKPOK_MANAGER_ADDRESS}
+      - --input-verification-address=${INPUT_VERIFICATION_ADDRESS}
       - --verify-proof-req-database-channel="event_zkpok_new_work"
     depends_on:
       db:
@@ -155,9 +155,9 @@ services:
       - --database-url=${DATABASE_URL}
       - --gateway-url=${GATEWAY_WS_URL}
       - --private-key=${TX_SENDER_PRIVATE_KEY}
-      - --ciphertext-manager-address=${CIPHERTEXT_MANAGER_ADDRESS}
-      - --zkpok-manager-address=${ZKPOK_MANAGER_ADDRESS}
-      - --acl-manager-address=${ACL_MANAGER_ADDRESS}
+      - --ciphertext-commits-address=${CIPHERTEXT_COMMITS_ADDRESS}
+      - --input-verification-address=${INPUT_VERIFICATION_ADDRESS}
+      - --multichain-acl-address=${MULTI_CHAIN_ACL_ADDRESS}
       - --database-pool-size=10
       - --database-polling-interval-secs=5
       - --verify-proof-resp-database-channel="event_zkpok_computed"

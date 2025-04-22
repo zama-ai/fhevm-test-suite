@@ -11,13 +11,13 @@ service_name = "kms-connector"
 # Chain ID for the L2 network (required)
 # chain_id = 
 
-# Address of the DecryptionManager contract (required)
+# Address of the Decryption contract (required)
 # Format: hex string with 0x prefix
-# decryption_manager_address = ""
+# decryption_address = ""
 
-# Address of the HTTPZ contract (required)
+# Address of the GatewayConfig contract (required)
 # Format: hex string with 0x prefix
-# httpz_address = ""
+# gateway_config_address = ""
 
 # KMS-core gRPC endpoint (required)
 # Format: http://host:port
@@ -33,7 +33,7 @@ service_name = "kms-connector"
 # If provided, the connector will use this signing key instead of the mnemonic
 # signing_key_path = ""
 
-# Whether to verify coprocessors against the HTTPZ contract (optional, defaults to false)
+# Whether to verify coprocessors against the GatewayConfig contract (optional, defaults to false)
 # verify_coprocessors = true
 
 # S3 configuration for ciphertext storage (optional)
