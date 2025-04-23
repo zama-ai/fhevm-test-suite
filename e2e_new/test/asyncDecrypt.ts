@@ -1,4 +1,4 @@
-import { ethers, hardhatArguments as network } from "hardhat";
+import { ethers } from "hardhat";
 
 const currentTime = (): string => {
   const now = new Date();
@@ -10,40 +10,31 @@ const currentTime = (): string => {
   });
 };
 
-const argEvents =
-  "(uint256 indexed counter, uint256 requestID, bytes32[] cts, address contractCaller, bytes4 callbackSelector)";
-const ifaceEventDecryption = new ethers.Interface([
-  "event DecryptionRequest" + argEvents,
-]);
-
 let firstBlockListening: number;
 
 export const initDecryptionOracle = async (): Promise<void> => {
   firstBlockListening = await ethers.provider.getBlockNumber();
 
-  const eventSignature = ifaceEventDecryption
-    .getEvent("DecryptionRequest")
-    .format();
-  const topicHash =
-    ifaceEventDecryption.getEvent("DecryptionRequest").topicHash;
+  const decryptionEventFragment =
+    "event DecryptionRequest(uint256 indexed counter, uint256 requestID, bytes32[] cts, address contractCaller, bytes4 callbackSelector)";
+  const iface = new ethers.Interface([decryptionEventFragment]);
 
-  ethers.provider.on(
-    {
-      address: process.env.DECRYPTION_ORACLE_ADDRESS,
-      topics: [topicHash],
-    },
-    async (log) => {
-      const parsedLog = ifaceEventDecryption.parseLog(log);
-      const [counter, requestID, cts, contractCaller, callbackSelector] =
-        parsedLog.args;
+  const topicHash = iface.getEvent("DecryptionRequest")!.topicHash;
+  const filter = {
+    address: process.env.DECRYPTION_ORACLE_ADDRESS!,
+    topics: [topicHash],
+  };
 
-      console.log(
-        `${currentTime()} - Requested decrypt on block ${
-          log.blockNumber
-        } (counter ${counter} - requestID ${requestID})`
-      );
-    }
-  );
+  ethers.provider.on(filter, async (log) => {
+    const parsed = iface.parseLog(log);
+    const { counter, requestID, cts, contractCaller, callbackSelector } =
+      parsed!.args;
+
+    console.log(
+      `${currentTime()} - Requested decrypt on block ${log.blockNumber} ` +
+        `(counter ${counter} - requestID ${requestID})`
+    );
+  });
 };
 
 export const awaitAllDecryptionResults = async (): Promise<void> => {
