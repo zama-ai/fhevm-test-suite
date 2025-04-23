@@ -17,7 +17,7 @@ services:
         echo '=================STARTING KMS SERVICE================='
         kms-server --config-file config/config.toml
     volumes:
-      - httpz_minio_secrets:/minio_secrets
+      - fhevm_minio_secrets:/minio_secrets
       - ../config/kms-core/config.toml:/app/kms/core/service/config/config.toml
     ports:
       - "50051:50051"
@@ -29,7 +29,7 @@ services:
       start_period: 1s
 
   generate-fhe-keys:
-    container_name: httpz-generate-fhe-keys
+    container_name: fhevm-generate-fhe-keys
     image: ghcr.io/zama-ai/kms-core-client:${CORE_VERSION}
     env_file:
       - ../env/staging/.env.core.local
@@ -44,12 +44,12 @@ services:
         bin/kms-core-client -f config.toml insecure-crs-gen --max-num-bits 2048
 
     volumes:
-      - httpz_minio_secrets:/minio_secrets
+      - fhevm_minio_secrets:/minio_secrets
       - ../config/core-client/config.toml:/app/kms-core-client/config.toml
     depends_on:
       kms-core:
         condition: service_started
 
 volumes:
-  httpz_minio_secrets:
+  fhevm_minio_secrets:
     external: true

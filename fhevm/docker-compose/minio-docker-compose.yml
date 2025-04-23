@@ -1,6 +1,6 @@
 services:
   minio:
-    container_name: httpz-minio
+    container_name: fhevm-minio
     image: quay.io/minio/minio
     env_file:
       - ../env/staging/.env.minio.local
@@ -16,7 +16,7 @@ services:
       retries: 10
 
   minio-setup:
-    container_name: httpz-minio-setup
+    container_name: fhevm-minio-setup
     image: quay.io/minio/mc
     env_file:
       - ../env/staging/.env.minio.local

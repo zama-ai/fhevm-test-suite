@@ -9,7 +9,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 # Global project vars
-PROJECT="httpz"
+PROJECT="fhevm"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 log_info() {
@@ -198,7 +198,7 @@ cleanup "$@"
 prepare_all_env_files
 prepare_local_config_relayer
 
-log_info "Deploying HTTPZ stack..."
+log_info "Deploying FHEVM stack..."
 log_info "Using component versions:"
 log_info "  CORE: ${CORE_VERSION}"
 log_info "  CONNECTOR: ${CONNECTOR_VERSION}"
@@ -228,7 +228,7 @@ run_compose "host" "Host Network Services" \
     "${PROJECT}-host-node:running" \
     "${PROJECT}-host-sc-deploy:complete"
 
-get_minio_ip "httpz-minio"
+get_minio_ip "fhevm-minio"
 
 run_compose "connector" "Connector Services" \
     "kms-connector:running"
@@ -237,7 +237,7 @@ run_compose "coprocessor" "Coprocessor Services" \
     "${PROJECT}-coprocessor-db:running" \
     "${PROJECT}-key-downloader:complete" \
     "${PROJECT}-db-migration:complete" \
-    "${PROJECT}-httpz-listener:running" \
+    "${PROJECT}-fhevm-listener:running" \
     "${PROJECT}-gw-listener:running" \
     "${PROJECT}-tfhe-worker:running" \
     "${PROJECT}-zkproof-worker:running" \
