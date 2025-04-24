@@ -1,27 +1,12 @@
 import "@nomicfoundation/hardhat-toolbox";
-import "@openzeppelin/hardhat-upgrades";
 import dotenv from "dotenv";
-import "hardhat-deploy";
-import "hardhat-ignore-warnings";
 import type { HardhatUserConfig, extendProvider } from "hardhat/config";
 import { task } from "hardhat/config";
 import type { NetworkUserConfig } from "hardhat/types";
 import { resolve } from "path";
 
-import CustomProvider from "./CustomProvider";
-import "./tasks/accounts";
-import "./tasks/etherscanVerify";
-import "./tasks/taskDeploy";
-import "./tasks/taskDeployL2";
-import "./tasks/taskUtils";
-import "./tasks/upgradeProxy";
 
 const NUM_ACCOUNTS = 15;
-
-extendProvider(async (provider, config, network) => {
-  const newProvider = new CustomProvider(provider);
-  return newProvider;
-});
 
 task("compile:specific", "Compiles only the specified contract")
   .addParam("contract", "The contract's path")
