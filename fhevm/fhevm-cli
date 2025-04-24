@@ -54,7 +54,7 @@ case $COMMAND in
         ;;
       public-decryption)
         echo "Running public decryption test: euint64 type..."
-        docker exec fhevm-tests-e2e-debug ./run-tests.sh "test async decrypt uint64 trivial"
+        docker exec fhevm-tests-e2e-debug ./run-tests.sh "test async decrypt uint64"
         ;;
       public-decryption-ebytes256)
         echo "Running public decryption test: ebytes256 type..."
