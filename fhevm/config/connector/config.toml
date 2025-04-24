@@ -24,7 +24,7 @@ service_name = "kms-connector"
 # kms_core_endpoint = "http://[::1]:50051"
 
 # GateWay L2 WebSocket RPC URL endpoint (required)
-# gwl2_url = ""
+# gateway_url = ""
 
 # Size of the event processing channel (optional)
 # channel_size = 1000
