@@ -4,7 +4,7 @@ import { ContractMethodArgs, Typed } from "ethers";
 import { Signer } from "ethers";
 import { ethers, network } from "hardhat";
 import operatorsPrices from "./operatorsPrices.json";
-import { ALL_FHE_TYPES } from ".types";
+import { ALL_FHE_TYPES } from "./types";
 
 import type { Counter } from "../types";
 import { TypedContractMethod } from "../types/common";
