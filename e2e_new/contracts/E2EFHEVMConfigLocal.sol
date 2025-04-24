@@ -3,16 +3,16 @@ pragma solidity ^0.8.24;
 
 import {FHEVMConfigStruct, FHE} from "@fhevm/solidity/lib/FHE.sol";
 
-address constant DECRYPTION_ORACLE_ADDRESS = 0x096b4679d45fB675d4e2c1E4565009Cec99A12B1;
+address constant DECRYPTION_ORACLE_ADDRESS = 0xAb30999D17FAAB8c95B2eCD500cFeFc8f658f15d;
 
 library DefaultFHEVMConfig {
     function getConfig() internal pure returns (FHEVMConfigStruct memory) {
         return
             FHEVMConfigStruct({
-                ACLAddress: 0x339EcE85B9E11a3A3AA557582784a15d7F82AAf2,
-                FHEVMExecutorAddress: 0x596E6682c72946AF006B27C131793F2b62527A4b,
-                KMSVerifierAddress: 0x208De73316E44722e16f6dDFF40881A3e4F86104,
-                InputVerifierAddress: 0x3a2DA6f1daE9eF988B48d9CF27523FA31a8eBE50
+                ACLAddress: 0x05fD9B5EFE0a996095f42Ed7e77c390810CF660c,
+                FHEVMExecutorAddress: 0x12B064FB845C1cc05e9493856a1D637a73e944bE,
+                KMSVerifierAddress: 0xcCAe95fF1d11656358E782570dF0418F59fA40e1,
+                InputVerifierAddress: 0xa1880e99d86F081E8D3868A8C4732C8f65dfdB11
             });
     }
 }
