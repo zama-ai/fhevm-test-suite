@@ -34,7 +34,6 @@ service_name = "kms-connector"
 # signing_key_path = ""
 
 # Whether to verify coprocessors against the GatewayConfig contract (optional, defaults to false)
-# verify_coprocessors = true
 
 # S3 configuration for ciphertext storage (optional)
 # [s3_config]

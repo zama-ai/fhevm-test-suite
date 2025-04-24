@@ -1,7 +1,7 @@
 services:
   ####################### DATABASE SETUP #######################
   db:
-    container_name: httpz-coprocessor-db
+    container_name: fhevm-coprocessor-db
     image: postgres:15.7
     restart: always
     env_file:
@@ -17,7 +17,7 @@ services:
       - db:/var/lib/postgresql/data
 
   key-downloader:
-    container_name: httpz-key-downloader
+    container_name: fhevm-key-downloader
     image: busybox
     env_file:
       - ../env/staging/.env.coprocessor.local
@@ -35,8 +35,8 @@ services:
             echo 'Downloaded PP key - All downloads complete'"
 
   db-migration:
-    container_name: httpz-db-migration
-    image: ghcr.io/zama-ai/httpz-backend/db-migration:${DB_MIGRATION_VERSION}
+    container_name: fhevm-db-migration
+    image: ghcr.io/zama-ai/fhevm-backend/db-migration:${DB_MIGRATION_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     environment:
@@ -50,9 +50,9 @@ services:
         condition: service_completed_successfully
 
   ####################### COPROCESSOR SERVICES #######################
-  httpz-listener:
-    container_name: httpz-httpz-listener
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+  fhevm-listener:
+    container_name: fhevm-fhevm-listener
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:
@@ -67,8 +67,8 @@ services:
         condition: service_completed_successfully
 
   gw-listener:
-    container_name: httpz-gw-listener
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+    container_name: fhevm-gw-listener
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:
@@ -84,8 +84,8 @@ services:
         condition: service_completed_successfully
 
   tfhe-worker:
-    container_name: httpz-tfhe-worker
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+    container_name: fhevm-tfhe-worker
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:
@@ -105,8 +105,8 @@ services:
         condition: service_completed_successfully
 
   zkproof-worker:
-    container_name: httpz-zkproof-worker
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+    container_name: fhevm-zkproof-worker
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:
@@ -124,8 +124,8 @@ services:
         condition: service_completed_successfully
 
   sns-worker:
-    container_name: httpz-sns-worker
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+    container_name: fhevm-sns-worker
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:
@@ -146,8 +146,8 @@ services:
         condition: service_completed_successfully
 
   transaction-sender:
-    container_name: httpz-transaction-sender
-    image: ghcr.io/zama-ai/httpz-backend/coprocessor:${COPROCESSOR_VERSION}
+    container_name: fhevm-transaction-sender
+    image: ghcr.io/zama-ai/fhevm-backend/coprocessor:${COPROCESSOR_VERSION}
     env_file:
       - ../env/staging/.env.coprocessor.local
     command:

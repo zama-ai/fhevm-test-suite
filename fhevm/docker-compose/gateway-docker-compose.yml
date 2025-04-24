@@ -1,6 +1,6 @@
 services:
   gateway-node:
-    container_name: httpz-gateway-node
+    container_name: fhevm-gateway-node
     image: ghcr.io/foundry-rs/foundry:stable
     env_file:
       - ../env/staging/.env.gateway.local
@@ -22,8 +22,8 @@ services:
       - "8546:8546"
   
   gateway-sc-deploy:
-    container_name: httpz-gateway-sc-deploy
-    image: ghcr.io/zama-ai/httpz-gateway/sc-bundle:${GATEWAY_VERSION}
+    container_name: fhevm-gateway-sc-deploy
+    image: ghcr.io/zama-ai/fhevm-gateway/contracts:${GATEWAY_VERSION}
     env_file:
       - ../env/staging/.env.gateway.local
     command:
@@ -33,8 +33,8 @@ services:
         condition: service_started
 
   gateway-sc-add-network:
-    container_name: httpz-gateway-sc-add-network
-    image: ghcr.io/zama-ai/httpz-gateway/sc-bundle:${GATEWAY_VERSION}
+    container_name: fhevm-gateway-sc-add-network
+    image: ghcr.io/zama-ai/fhevm-gateway/contracts:${GATEWAY_VERSION}
     env_file:
       - ../env/staging/.env.gateway.local
     command:

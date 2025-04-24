@@ -67,13 +67,13 @@ else
     log_info "The value that should be set: $SIGNER_ADDRESS"
 fi
 
-if ! docker ps -a | grep -q "httpz-generate-fhe-keys"; then
-    log_error "Container httpz-generate-fhe-keys not found. Make sure it has been run."
+if ! docker ps -a | grep -q "fhevm-generate-fhe-keys"; then
+    log_error "Container fhevm-generate-fhe-keys not found. Make sure it has been run."
     exit 1
 fi
 
-log_info "Retrieving logs from httpz-generate-fhe-keys container..."
-LOGS=$(docker logs httpz-generate-fhe-keys)
+log_info "Retrieving logs from fhevm-generate-fhe-keys container..."
+LOGS=$(docker logs fhevm-generate-fhe-keys)
 
 # Extract key request IDs
 KEY_GEN_ID=$(echo "$LOGS" | grep -A1 "insecure keygen done" | grep "request_id" | sed 's/.*"request_id": "\([^"]*\)".*/\1/')

@@ -1,6 +1,6 @@
 services:
   host-node:
-    container_name: httpz-host-node
+    container_name: fhevm-host-node
     image: ghcr.io/foundry-rs/foundry:stable
     env_file:
       - ../env/staging/.env.host.local
@@ -22,8 +22,8 @@ services:
       - "8545:8545"
   
   host-sc-deploy:
-    container_name: httpz-host-sc-deploy
-    image: ghcr.io/zama-ai/httpz-backend/contracts/sc-bundle:${HOST_VERSION}
+    container_name: fhevm-host-sc-deploy
+    image: ghcr.io/zama-ai/fhevm-backend/contracts:${HOST_VERSION}
     env_file:
       - ../env/staging/.env.host.local
     command:

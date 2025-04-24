@@ -1,4 +1,4 @@
-name: HTTPZ E2E Tests
+name: fhevm E2E Tests
 
 on:
   workflow_dispatch:
@@ -11,49 +11,49 @@ on:
       connector_version:
         description: "Connector Version"
         required: false
-        default: "v0.11.0-rc7.1"
+        default: "0b81d9e"
         type: string
       coprocessor_version:
         description: "Coprocessor Image Version"
         required: false
-        default: "v0.7.0-rc5"
+        default: "4ef6e2b"
         type: string
       db_migration_version:
         description: "Coprocessor DB Migration Image Version"
         required: false
-        default: "v0.7.0-rc5"
+        default: "0208d02"
         type: string
       host_version:
         description: "Host Image Version"
         required: false
-        default: "v0.7.0-rc5"
+        default: "37e9517"
         type: string
       gateway_version:
         description: "Gateway Image Version"
         required: false
-        default: "v0.1.0-rc11"
+        default: "980e5b0"
         type: string
       relayer_version:
         description: "Relayer Image Version"
         required: false
-        default: "v0.1.0-rc6"
+        default: "e150de4"
         type: string
       tests_version:
         description: "E2E Tests Image Version"
         required: false
-        default: "v0.1.0-rc6"
+        default: "64edbd6"
         type: string
   pull_request:
     paths:
-      - ".github/workflows/httpz-e2e-tests.yml"
-      - "httpz/**"
+      - ".github/workflows/fhevm-e2e-tests.yml"
+      - "fhevm/**"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  httpz-e2e-test:
+  fhevm-e2e-test:
     permissions:
       contents: "read"
       id-token: "write"
@@ -74,8 +74,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_READ_TOKEN }}
 
-      - name: Deploy HTTPZ Stack
-        working-directory: httpz
+      - name: Deploy fhevm Stack
+        working-directory: fhevm
         env:
           CORE_VERSION: ${{ inputs.core_version }}
           CONNECTOR_VERSION: ${{ inputs.connector_version }}
@@ -86,50 +86,50 @@ jobs:
           RELAYER_VERSION: ${{ inputs.relayer_version }}
           TESTS_VERSION: ${{ inputs.tests_version }}
         run: |
-          ./httpz-cli deploy
+          ./fhevm-cli deploy
 
       - name: Input proof test (uint64)
-        working-directory: httpz
+        working-directory: fhevm
         run: |
-          ./httpz-cli test input-proof
+          ./fhevm-cli test input-proof
 
       - name: User Decryption test (ebool)
-        working-directory: httpz
+        working-directory: fhevm
         run: |
-          ./httpz-cli test user-decryption
+          ./fhevm-cli test user-decryption
 
       - name: Public Decryption test (euint64)
-        working-directory: httpz
+        working-directory: fhevm
         run: |
-          ./httpz-cli test public-decryption
+          ./fhevm-cli test public-decryption
 
       - name: Public Decryption test (ebytes256)
-        working-directory: httpz
+        working-directory: fhevm
         run: |
-          ./httpz-cli test public-decryption-ebytes256
+          ./fhevm-cli test public-decryption-ebytes256
 
       - name: ERC20 test
-        working-directory: httpz
+        working-directory: fhevm
         continue-on-error: true
         run: |
-          ./httpz-cli test erc20
+          ./fhevm-cli test erc20
 
       - name: Show logs on test failure
-        working-directory: httpz
+        working-directory: fhevm
         if: always()
         run: |
           echo "::group::Relayer Logs"
-          ./httpz-cli logs relayer
+          ./fhevm-cli logs relayer
           echo "::endgroup::"
           echo "::group::SNS Worker Logs"
-          ./httpz-cli logs sns-worker | grep -v "Selected 0 rows to process"
+          ./fhevm-cli logs sns-worker | grep -v "Selected 0 rows to process"
           echo "::endgroup::"
           echo "::group::Transaction Sender Logs (filtered)"
-          ./httpz-cli logs transaction-sender | grep -v "Selected 0 rows to process"
+          ./fhevm-cli logs transaction-sender | grep -v "Selected 0 rows to process"
           echo "::endgroup::"
 
       - name: Cleanup
-        working-directory: httpz
+        working-directory: fhevm
         if: always()
         run: |
-          ./httpz-cli clean
+          ./fhevm-cli clean
