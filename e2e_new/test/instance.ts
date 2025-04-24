@@ -35,6 +35,7 @@ export const createInstances = async (
 };
 
 export const createInstance = async () => {
+  console.log("relayer url given to create instance", relayerUrl);
   const instance = await createFhevmInstance({
     verifyingContractAddress: verifyingContract,
     kmsContractAddress: kmsAdd,
