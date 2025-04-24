@@ -6,8 +6,8 @@ services:
     env_file:
       - ../env/staging/.env.tests.local
     volumes: 
-      - ./e2e_new:/app/e2e
-      - ./fhevm/scripts/run-tests.sh:/app/run-tests.sh
+      - ../../e2e_new:/app/e2e
+      - ../scripts/run-tests.sh:/app/run-tests.sh
     command:
       - /bin/bash
       - -c
