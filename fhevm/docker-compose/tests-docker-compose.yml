@@ -5,6 +5,8 @@ services:
     image: ghcr.io/zama-ai/fhevm-test-suite/e2e:${TESTS_VERSION}
     env_file:
       - ../env/staging/.env.tests.local
+    volumes: 
+      - ./e2e_new:/app/e2e
     command:
       - /bin/bash
       - -c
