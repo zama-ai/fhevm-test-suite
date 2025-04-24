@@ -18,7 +18,8 @@ let clientKey: Uint8Array | undefined;
 const kmsAdd = process.env.KMS_VERIFIER_CONTRACT_ADDRESS;
 const aclAdd = process.env.ACL_CONTRACT_ADDRESS;
 const gatewayChainID = +process.env.CHAIN_ID_GATEWAY!;
-const verifyingContract = process.env.DECRYPTION_MANAGER_ADDRESS!;
+const verifyingContract = process.env.DECRYPTION_ADDRESS!;
+const relayerUrl = process.env.RELAYER_URL!;
 
 export const createInstances = async (
   accounts: Signers
@@ -34,7 +35,6 @@ export const createInstances = async (
 };
 
 export const createInstance = async () => {
-  const relayerUrl = "http://localhost:3000";
   const instance = await createFhevmInstance({
     verifyingContractAddress: verifyingContract,
     kmsContractAddress: kmsAdd,
