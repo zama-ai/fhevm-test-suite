@@ -97,15 +97,26 @@ const chainIds = {
 
 function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
   let jsonRpcUrl: string;
+  const defaultRpcUrl = "http://localhost:8545";
+
   switch (chain) {
     case "staging":
-      jsonRpcUrl = process.env.RPC_URL!;
+      jsonRpcUrl = process.env.RPC_URL || defaultRpcUrl;
+      if (jsonRpcUrl === defaultRpcUrl && !process.env.RPC_URL) {
+        console.warn(`WARN: RPC_URL environment variable not set for network '${chain}'. Using default: ${defaultRpcUrl}`);
+      }
       break;
     case "zwsDev":
-      jsonRpcUrl = process.env.RPC_URL!;
+      jsonRpcUrl = process.env.RPC_URL || defaultRpcUrl;
+      if (jsonRpcUrl === defaultRpcUrl && !process.env.RPC_URL) {
+        console.warn(`WARN: RPC_URL environment variable not set for network '${chain}'. Using default: ${defaultRpcUrl}`);
+      }
       break;
     case "sepolia":
-      jsonRpcUrl = process.env.RPC_URL!;
+      jsonRpcUrl = process.env.RPC_URL || defaultRpcUrl;
+      if (jsonRpcUrl === defaultRpcUrl && !process.env.RPC_URL) {
+        console.warn(`WARN: RPC_URL environment variable not set for network '${chain}'. Using default: ${defaultRpcUrl}`);
+      }
       break;
     case "localCoprocessor":
       jsonRpcUrl = "http://localhost:8746";
