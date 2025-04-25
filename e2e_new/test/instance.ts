@@ -42,7 +42,7 @@ export const createInstance = async () => {
     aclContractAddress: aclAdd,
     network: network.config.url,
     relayerUrl: relayerUrl,
-    gatewayChainId: gatewayChainID || "54321",
+    gatewayChainId: gatewayChainID,
   });
   return instance;
 };
