@@ -93,11 +93,6 @@ jobs:
         run: |
           ./fhevm-cli test input-proof
 
-      - name: User Decryption test (ebool)
-        working-directory: fhevm
-        run: |
-          ./fhevm-cli test user-decryption
-
       - name: Public Decryption test (euint64)
         working-directory: fhevm
         run: |
@@ -107,6 +102,11 @@ jobs:
         working-directory: fhevm
         run: |
           ./fhevm-cli test public-decryption-ebytes256
+
+      - name: User Decryption test (ebool)
+        working-directory: fhevm
+        run: |
+          ./fhevm-cli test user-decryption
 
       - name: ERC20 test
         working-directory: fhevm
