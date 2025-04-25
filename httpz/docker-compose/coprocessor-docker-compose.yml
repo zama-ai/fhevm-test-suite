@@ -27,10 +27,8 @@ services:
       sh -c "echo 'Starting key downloads...' &&
             wget $KMS_PUBLIC_KEY -O /keys/pks &&
             echo 'Downloaded public key' &&
-            wget $KMS_SERVER_KEY -O /keys/sks &&
+            wget $KMS_SERVER_KEY -O /keys/sns_pk &&
             echo 'Downloaded server key' &&
-            wget $KMS_SNS_KEY -O /keys/sns_pk &&
-            echo 'Downloaded SNS key' &&
             wget $KMS_CRS_KEY -O /keys/pp &&
             echo 'Downloaded PP key - All downloads complete'"
 
