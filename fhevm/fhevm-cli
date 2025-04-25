@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT="fhevm"
 
-export CORE_VERSION=${CORE_VERSION:-"v0.11.0-rc7"}
+export CORE_VERSION=${CORE_VERSION:-"nightly-fd875f9-amd64-prod"}
 export CONNECTOR_VERSION=${CONNECTOR_VERSION:-"0b81d9e"}
 export COPROCESSOR_VERSION=${COPROCESSOR_VERSION:-"b2a2895"}
 export DB_MIGRATION_VERSION=${DB_MIGRATION_VERSION:-"b2a2895"}
