@@ -61,7 +61,7 @@ describe("EncryptedERC20", function () {
     expect(totalSupply).to.equal(1000n);
   });
 
-  it("should transfer tokens between two users", async function () {
+  it("should transfer tokens between two users.", async function () {
     const transaction = await this.erc20.mint(10000);
     const t1 = await transaction.wait();
     expect(t1?.status).to.eq(1);
