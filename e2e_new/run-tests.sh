@@ -32,4 +32,4 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 echo -e "${GREEN}Running input proof tests with grep: \"$GREP_TEXT\"...${RESET}"
-RUST_RELAYER=true npx hardhat test --grep "$GREP_TEXT" --network "$NETWORK"
+npx hardhat test --grep "$GREP_TEXT" --network "$NETWORK"
