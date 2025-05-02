@@ -149,7 +149,7 @@ case $COMMAND in
           ;;
         user-decryption)
           log_message="${LIGHT_BLUE}${BOLD}[TEST] USER DECRYPTION (ebool)${RESET}"
-          docker_args+=("-g" "test reencrypt ebool")
+          docker_args+=("-g" "test user decrypt ebool")
           ;;
         public-decryption)
           log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION (euint64)${RESET}"
