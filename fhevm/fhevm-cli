@@ -164,11 +164,11 @@ case $COMMAND in
           docker_args+=("-g" "should transfer tokens between two users.")
           ;;
         public-decrypt-http-ebool)
-          log_message="${LIGHT_BLUE}${BOLD}[TEST] ERC20${RESET}"
+          log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION OVER HTTP FOR EBOOL${RESET}"
           docker_args+=("-g" "test HTTPPublicDecrypt ebool")
           ;;
         public-decrypt-http-mixed)
-          log_message="${LIGHT_BLUE}${BOLD}[TEST] ERC20${RESET}"
+          log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION OVER HTTP FOR MIXED${RESET}"
           docker_args+=("-g" "test HTTPPublicDecrypt mixed")
           ;;
         debug)
