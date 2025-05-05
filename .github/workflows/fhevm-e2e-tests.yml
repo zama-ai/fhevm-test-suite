@@ -114,6 +114,18 @@ jobs:
         run: |
           ./fhevm-cli test erc20
 
+      - name: Public Decryption HTTP endpoint test (ebool)
+        working-directory: fhevm
+        continue-on-error: true
+        run: |
+          ./fhevm-cli test public-decrypt-ebool
+
+      - name: Public Decryption HTTP endpoint test (mixed)
+        working-directory: fhevm
+        continue-on-error: true
+        run: |
+          ./fhevm-cli test public-decrypt-mixed
+
       - name: Show logs on test failure
         working-directory: fhevm
         if: always()
