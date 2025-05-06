@@ -103,7 +103,7 @@ jobs:
         run: |
           ./fhevm-cli test public-decryption-ebytes256
 
-      - name: User Decryption test (ebool)
+      - name: User Decryption test
         working-directory: fhevm
         run: |
           ./fhevm-cli test user-decryption
