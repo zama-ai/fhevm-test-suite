@@ -152,8 +152,8 @@ case $COMMAND in
           docker_args+=("-g" "test user decrypt")
           ;;
         public-decryption)
-          log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION (euint64)${RESET}"
-          docker_args+=("-g" "test async decrypt uint64")
+          log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION${RESET}"
+          docker_args+=("-g" "test async decrypt (uint.*|ebytes.* trivial|ebytes64 non-trivial|ebytes256 non-trivial with snapshot|addresses|several addresses)")
           ;;
         public-decryption-ebytes256)
           log_message="${LIGHT_BLUE}${BOLD}[TEST] PUBLIC DECRYPTION (ebytes256)${RESET}"
