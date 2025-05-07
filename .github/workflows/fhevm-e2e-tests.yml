@@ -128,7 +128,7 @@ jobs:
 
       - name: Show logs on test failure
         working-directory: fhevm
-        if: always()
+        if: failure()
         run: |
           echo "::group::Relayer Logs"
           ./fhevm-cli logs relayer
