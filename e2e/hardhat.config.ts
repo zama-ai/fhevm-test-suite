@@ -5,7 +5,6 @@ import { task } from "hardhat/config";
 import type { NetworkUserConfig } from "hardhat/types";
 import { resolve } from "path";
 
-
 const NUM_ACCOUNTS = 15;
 
 task("compile:specific", "Compiles only the specified contract")
@@ -213,8 +212,26 @@ const config: HardhatUserConfig = {
       viaIR: false,
     },
   },
+  sourcify: {
+    enabled: false,
+  },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY!,
+    apiKey: {
+      mainnet: process.env.ETHERSCAN_API_KEY!,
+      sepolia: process.env.ETHERSCAN_API_KEY!,
+      zwsDev: "empty",
+    },
+    customChains: [
+      {
+        network: "zwsDev",
+        chainId: 1337,
+        urls: {
+          apiURL:
+            "http://l1-blockscout-zws-dev-blockscout-stack-blockscout-svc.ethereum-blockchain/api",
+          browserURL: "https://l1-explorer-zws-dev.diplodocus-boa.ts.net",
+        },
+      },
+    ],
   },
   warnings: {
     "*": {
