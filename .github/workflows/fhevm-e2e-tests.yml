@@ -110,19 +110,16 @@ jobs:
 
       - name: ERC20 test
         working-directory: fhevm
-        continue-on-error: true
         run: |
           ./fhevm-cli test erc20
 
       - name: Public Decryption HTTP endpoint test (ebool)
         working-directory: fhevm
-        continue-on-error: true
         run: |
           ./fhevm-cli test public-decrypt-http-ebool
 
       - name: Public Decryption HTTP endpoint test (mixed)
         working-directory: fhevm
-        continue-on-error: true
         run: |
           ./fhevm-cli test public-decrypt-http-mixed
 
