@@ -29,6 +29,7 @@ describe("User decryption", function () {
       privateKey,
       publicKey
     );
+    console.log(handle);
     expect(decryptedValue).to.equal(1n);
 
     // on the other hand, Bob should be unable to read Alice's handle

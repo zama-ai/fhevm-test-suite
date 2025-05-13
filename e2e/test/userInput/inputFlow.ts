@@ -34,6 +34,7 @@ describe("Input Flow", function () {
     console.log(
       "InputProof: 0x" + Buffer.from(encryptedAmount.inputProof).toString("hex")
     );
+    console.log(this.contractAddress);
     const tx = await this.contract.requestUint64NonTrivial(
       encryptedAmount.handles[0],
       encryptedAmount.inputProof
