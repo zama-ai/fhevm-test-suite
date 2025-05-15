@@ -140,6 +140,7 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
   // TODO: to avoid this issue, a solution is to add an http endpoint on the relayer to know if the callback reverted,
   // since this cannot be detected onchain with new oracle design (fulfill now happens by calling directly the dapp contract)
 
+  await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
   // Force one last poll to ensure we have the latest data
   await pollEvents();
 
