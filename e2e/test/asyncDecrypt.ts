@@ -10,6 +10,8 @@ const currentTime = (): string => {
   });
 };
 
+const GATEWAY_BLOCKTIME = 1000; // 1s
+
 const pendingDecryptionRequestCounters = new Set<bigint>();
 const pendingDecryptionRequestParameters = new Map<bigint, [string, bigint]>();
 
@@ -86,6 +88,10 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
     `${currentTime()} - Waiting for ${pendingDecryptionRequestCounters.size}` +
       ` pending decryption request(s) to be fulfilled…`
   );
+
+  // wait at least one gateway block to avoid potential race condition
+  await new Promise((resolve) => setTimeout(resolve, GATEWAY_BLOCKTIME));
+
   // every 100ms, check if we're done
   while (pendingDecryptionRequestCounters.size > 0) {
     await new Promise((resolve) => setTimeout(resolve, 100));
