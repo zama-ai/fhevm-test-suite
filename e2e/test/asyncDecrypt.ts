@@ -10,19 +10,17 @@ const currentTime = (): string => {
   });
 };
 
-const GATEWAY_BLOCKTIME = 1000; // 1s
+const POLLING_INTERVAL = 1100; // Blocktime is 1s, so we use a slightly bigger polling time
 
+let lastProcessedBlock = 0;
 const pendingDecryptionRequestCounters = new Set<bigint>();
 const pendingDecryptionRequestParameters = new Map<bigint, [string, bigint]>();
 
+// Event definitions
 const decryptionRequestEventFragment =
   "event DecryptionRequest(uint256 indexed counter, uint256 requestID, bytes32[] cts, address contractCaller, bytes4 callbackSelector)";
 const ifaceRequest = new ethers.Interface([decryptionRequestEventFragment]);
 const topicHashRequest = ifaceRequest.getEvent("DecryptionRequest")!.topicHash;
-const filterOracle = {
-  address: process.env.DECRYPTION_ORACLE_ADDRESS!,
-  topics: [topicHashRequest],
-};
 
 const decryptionFulfillEventFragment =
   "event DecryptionFulfilled(uint256 indexed requestID)";
@@ -30,15 +28,72 @@ const ifaceFulfill = new ethers.Interface([decryptionFulfillEventFragment]);
 const topicHashFulfill = ifaceFulfill.getEvent(
   "DecryptionFulfilled"
 )!.topicHash;
-const filterFulfill = {
-  topics: [topicHashFulfill],
+
+// Initialize by starting the polling of eth_getLogs (more robust solution than using websocket to avoid missng events on anvil)
+export const initDecryptionOracle = async (): Promise<void> => {
+  lastProcessedBlock = await ethers.provider.getBlockNumber();
+  setInterval(pollEvents, POLLING_INTERVAL);
 };
 
-export const initDecryptionOracle = async (): Promise<void> => {
-  ethers.provider.on(filterOracle, async (log) => {
-    const parsed = ifaceRequest.parseLog(log);
+async function pollEvents(): Promise<void> {
+  const currentBlock = await ethers.provider.getBlockNumber();
+
+  // If no new blocks, skip this polling cycle
+  if (currentBlock <= lastProcessedBlock) {
+    return;
+  }
+
+  const [requestLogs, fulfillLogs] = await Promise.all([
+    getDecryptionRequestLogs(lastProcessedBlock + 1, currentBlock),
+    getDecryptionFulfillLogs(lastProcessedBlock + 1, currentBlock),
+  ]);
+
+  processDecryptionRequests(requestLogs);
+
+  processDecryptionFulfillments(fulfillLogs);
+
+  lastProcessedBlock = currentBlock;
+}
+
+async function getDecryptionRequestLogs(
+  fromBlock: number,
+  toBlock: number
+): Promise<ethers.Log[]> {
+  const filterOracle = {
+    address: process.env.DECRYPTION_ORACLE_ADDRESS!,
+    topics: [topicHashRequest],
+    fromBlock,
+    toBlock,
+  };
+
+  return ethers.provider.getLogs(filterOracle);
+}
+
+async function getDecryptionFulfillLogs(
+  fromBlock: number,
+  toBlock: number
+): Promise<ethers.Log[]> {
+  const filterFulfill = {
+    topics: [topicHashFulfill],
+    fromBlock,
+    toBlock,
+  };
+
+  return ethers.provider.getLogs(filterFulfill);
+}
+
+function processDecryptionRequests(logs: ethers.Log[]): void {
+  for (const log of logs) {
+    const parsed = ifaceRequest.parseLog({
+      topics: log.topics as string[],
+      data: log.data,
+    });
+
+    if (!parsed) continue;
+
     const { counter, requestID, cts, contractCaller, callbackSelector } =
-      parsed!.args;
+      parsed.args;
+
     console.log(
       `${currentTime()} - Requested public decryption on block ${
         log.blockNumber
@@ -50,11 +105,19 @@ export const initDecryptionOracle = async (): Promise<void> => {
       contractCaller,
       requestID,
     ]);
-  });
+  }
+}
 
-  ethers.provider.on(filterFulfill, async (log) => {
-    const parsed = ifaceFulfill.parseLog(log);
-    const { requestID } = parsed!.args;
+function processDecryptionFulfillments(logs: ethers.Log[]): void {
+  for (const log of logs) {
+    const parsed = ifaceFulfill.parseLog({
+      topics: log.topics as string[],
+      data: log.data,
+    });
+
+    if (!parsed) continue;
+
+    const { requestID } = parsed.args;
     const emitterAddress = log.address;
 
     // find which counter(s) this maps to
@@ -69,13 +132,16 @@ export const initDecryptionOracle = async (): Promise<void> => {
         );
       }
     }
-  });
-};
+  }
+}
 
 export const awaitAllDecryptionResults = async (): Promise<void> => {
   // WARNING: if the callback reverts, this function will timeout
   // TODO: to avoid this issue, a solution is to add an http endpoint on the relayer to know if the callback reverted,
   // since this cannot be detected onchain with new oracle design (fulfill now happens by calling directly the dapp contract)
+
+  // Force one last poll to ensure we have the latest data
+  await pollEvents();
 
   // if nothing pending, return immediately
   if (pendingDecryptionRequestCounters.size === 0) {
@@ -83,18 +149,16 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
     return;
   }
 
-  // otherwise poll until the Set is emptied by your event‐listener
+  // otherwise poll every 100ms until the Set is emptied by the event-listener
   console.log(
     `${currentTime()} - Waiting for ${pendingDecryptionRequestCounters.size}` +
-      ` pending decryption request(s) to be fulfilled…`
+      ` pending decryption request(s) to be fulfilled...`
   );
-
-  // wait at least one gateway block to avoid potential race condition
-  await new Promise((resolve) => setTimeout(resolve, GATEWAY_BLOCKTIME));
-
-  // every 100ms, check if we're done
   while (pendingDecryptionRequestCounters.size > 0) {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  console.log(`${currentTime()} - All decryption requests fulfilled.`);
+
+  if (pendingDecryptionRequestCounters.size === 0) {
+    console.log(`${currentTime()} - All decryption requests fulfilled.`);
+  }
 };
