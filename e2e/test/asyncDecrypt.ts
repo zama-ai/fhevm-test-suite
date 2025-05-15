@@ -40,7 +40,7 @@ export const initDecryptionOracle = async (): Promise<void> => {
     console.log(
       `${currentTime()} - Requested public decryption on block ${
         log.blockNumber
-      } ` + `(counter ${counter} - requestID ${requestID})`
+      } ` + ` (counter ${counter} - requestID ${requestID})`
     );
 
     pendingDecryptionRequestCounters.add(counter);
