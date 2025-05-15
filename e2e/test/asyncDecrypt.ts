@@ -86,9 +86,9 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
     `${currentTime()} - Waiting for ${pendingDecryptionRequestCounters.size}` +
       ` pending decryption request(s) to be fulfilled…`
   );
-  // every 10ms, check if we're done
+  // every 100ms, check if we're done
   while (pendingDecryptionRequestCounters.size > 0) {
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
   console.log(`${currentTime()} - All decryption requests fulfilled.`);
 };
