@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import type { Provider } from "ethers";
 
 const currentTime = (): string => {
   const now = new Date();
@@ -43,10 +44,14 @@ async function pollEvents(): Promise<void> {
     return;
   }
 
-  const [requestLogs, fulfillLogs] = await Promise.all([
-    getDecryptionRequestLogs(lastProcessedBlock + 1, currentBlock),
-    getDecryptionFulfillLogs(lastProcessedBlock + 1, currentBlock),
-  ]);
+  const requestLogs = await getDecryptionRequestLogs(
+    lastProcessedBlock + 1,
+    currentBlock
+  );
+  const fulfillLogs = await getDecryptionFulfillLogs(
+    lastProcessedBlock + 1,
+    currentBlock
+  );
 
   processDecryptionRequests(requestLogs);
 
@@ -140,8 +145,8 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
   // TODO: to avoid this issue, a solution is to add an http endpoint on the relayer to know if the callback reverted,
   // since this cannot be detected onchain with new oracle design (fulfill now happens by calling directly the dapp contract)
 
-  await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL));
   // Force one last poll to ensure we have the latest data
+  await waitOneBlock(ethers.provider); // wait one block to avoid race condition if some previous request was not confirmed
   await pollEvents();
 
   // if nothing pending, return immediately
@@ -163,3 +168,11 @@ export const awaitAllDecryptionResults = async (): Promise<void> => {
     console.log(`${currentTime()} - All decryption requests fulfilled.`);
   }
 };
+
+async function waitOneBlock(provider: Provider): Promise<void> {
+  await new Promise<void>((resolve) => {
+    provider.once("block", () => {
+      resolve();
+    });
+  });
+}
