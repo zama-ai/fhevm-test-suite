@@ -43,6 +43,7 @@ function usage {
   echo
   echo -e "${BOLD}${LIGHT_BLUE}Commands:${RESET}"
   echo -e "  ${YELLOW}deploy${RESET}              Deploy the full fhevm stack"
+  echo -e "  ${YELLOW}deploy exit${RESET}         Shutdown the full fhevm stack"
   echo -e "  ${YELLOW}test${RESET} ${CYAN}[TYPE]${RESET}         Run tests (input-proof|user-decryption|public-decryption|erc20|debug)"
   echo -e "  ${YELLOW}upgrade${RESET} ${CYAN}[SERVICE]${RESET}   Upgrade specific service (host|gateway|connector|coprocessor|relayer|tests)"
   echo -e "  ${YELLOW}clean${RESET}               Remove all containers and volumes"
@@ -78,7 +79,7 @@ case $COMMAND in
   deploy)
     print_logo
     echo -e "${LIGHT_BLUE}${BOLD}[DEPLOY] Deploying fhevm stack...${RESET}"
-    "${SCRIPT_DIR}/scripts/deploy-fhevm-stack.sh"
+    "${SCRIPT_DIR}/scripts/deploy-fhevm-stack.sh" "$@"
     echo -e "${GREEN}${BOLD} [SUCCESS] fhevm stack deployment complete!${RESET}"
     ;;
     
