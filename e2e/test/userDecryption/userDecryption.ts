@@ -106,7 +106,6 @@ describe("User decryption", function () {
 
   it("test user decrypt euint8", async function () {
     const handle = await this.contract.xUint8();
-    console.log("test user decrypt euint8 handle", handle);
     const { publicKey, privateKey } = this.instances.alice.generateKeypair();
     const decryptedValue = await userDecryptSingleHandle(
       handle,
